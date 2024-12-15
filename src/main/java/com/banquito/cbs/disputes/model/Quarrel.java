@@ -3,50 +3,49 @@ package com.banquito.cbs.disputes.model;
 import com.banquito.cbs.transactions.model.Transaction;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "disputa")
-public class Quarrel {
+public class Quarrel implements Serializable
+{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
 
-    @Column(name = "transaccion_id", nullable = false)
+    @Column(nullable = false)
     private Long transactionId;
 
-    @Column(name = "motivo", length = 255, nullable = false)
+    @Column(length = 255, nullable = false)
     private String reason;
 
-    @Column(name = "fecha_disputa", nullable = false)
+    @Column(nullable = false)
     private Date quarrelDate;
 
-    @Column(name = "fecha_resolucion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date resolutionDate;
 
-    @Column(name = "estado", length = 3, nullable = false)
-    private String quarrelState;
+    @Column(length = 3, nullable = false)
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "transaccion_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "TRANSACCION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Transaction transaction;
 
     public Quarrel() { }
 
-    public Quarrel(Long transactionId, String reason, Date quarrelDate, Date resolutionDate, String quarrelState) {
-        this.transactionId = transactionId;
-        this.reason = reason;
-        this.quarrelDate = quarrelDate;
-        this.resolutionDate = resolutionDate;
-        this.quarrelState = quarrelState;
+    public Quarrel(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,12 +81,12 @@ public class Quarrel {
         this.resolutionDate = resolutionDate;
     }
 
-    public String getQuarrelState() {
-        return quarrelState;
+    public String getStatus() {
+        return status;
     }
 
-    public void setQuarrelState(String quarrelState) {
-        this.quarrelState = quarrelState;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Transaction getTransaction() {
@@ -103,7 +102,7 @@ public class Quarrel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Quarrel quarrel = (Quarrel) o;
-        return Objects.equals(id, quarrel.id) && Objects.equals(transactionId, quarrel.transactionId) && Objects.equals(reason, quarrel.reason) && Objects.equals(quarrelDate, quarrel.quarrelDate) && Objects.equals(resolutionDate, quarrel.resolutionDate) && Objects.equals(quarrelState, quarrel.quarrelState) && Objects.equals(transaction, quarrel.transaction);
+        return Objects.equals(id, quarrel.id);
     }
 
     @Override
@@ -119,8 +118,7 @@ public class Quarrel {
                 ", reason='" + reason + '\'' +
                 ", quarrelDate=" + quarrelDate +
                 ", resolutionDate=" + resolutionDate +
-                ", quarrelState='" + quarrelState + '\'' +
-                ", transaction=" + transaction +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

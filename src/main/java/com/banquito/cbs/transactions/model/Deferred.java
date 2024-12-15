@@ -1,72 +1,62 @@
 package com.banquito.cbs.transactions.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Deferred {
+public class Deferred implements Serializable
+{
     @Id
-    @Column
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "transaccion_id", nullable = false)
+    @Column(nullable = false)
     private Long transactionId;
 
-    @Column(name = "cuotas")
+    @Column(nullable = false)
     private Integer quotas;
 
-    @Column(name = "cuotas_canceladas")
+    @Column(nullable = false)
     private Integer cancelledQuotas;
 
-    @Column(name = "porcentaje_interes")
+    @Column(precision = 3, scale = 2, nullable = false)
     private BigDecimal interestRate;
 
-    @Column(name = "monto")
+    @Column(precision = 18, scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "valor_cuota")
+    @Column(precision = 18, scale = 2, nullable = false)
     private BigDecimal quoteValue;
 
-    @Column(name = "valor_deuda")
-    private BigDecimal debtvalue;
+    @Column(precision = 18, scale = 2, nullable = false)
+    private BigDecimal debtValue;
 
-    @Column(name = "valor_deuda")
+    @Column(precision = 18, scale = 2, nullable = false)
     private BigDecimal remainingValue;
 
-    @Column(name = "valor_interes")
+    @Column(precision = 18, scale = 2, nullable = false)
     private BigDecimal interestValue;
 
-    @Column(name = "estado")
-    private String deferredState;
+    @Column(nullable = false)
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "transaccion_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "TRANSACTION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Transaction transaction;
 
     public Deferred() {}
 
-    public Deferred(Long transactionId, Integer quotas, Integer cancelledQuotas, BigDecimal interestRate, BigDecimal amount, BigDecimal quoteValue, BigDecimal debtvalue, BigDecimal remainingValue, BigDecimal interestValue, String deferredState) {
-        this.transactionId = transactionId;
-        this.quotas = quotas;
-        this.cancelledQuotas = cancelledQuotas;
-        this.interestRate = interestRate;
-        this.amount = amount;
-        this.quoteValue = quoteValue;
-        this.debtvalue = debtvalue;
-        this.remainingValue = remainingValue;
-        this.interestValue = interestValue;
-        this.deferredState = deferredState;
+    public Deferred(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -118,12 +108,12 @@ public class Deferred {
         this.quoteValue = quoteValue;
     }
 
-    public BigDecimal getDebtvalue() {
-        return debtvalue;
+    public BigDecimal getDebtValue() {
+        return debtValue;
     }
 
-    public void setDebtvalue(BigDecimal debtvalue) {
-        this.debtvalue = debtvalue;
+    public void setDebtValue(BigDecimal debtValue) {
+        this.debtValue = debtValue;
     }
 
     public BigDecimal getRemainingValue() {
@@ -142,12 +132,12 @@ public class Deferred {
         this.interestValue = interestValue;
     }
 
-    public String getDeferredState() {
-        return deferredState;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDeferredState(String deferredState) {
-        this.deferredState = deferredState;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Transaction getTransaction() {
@@ -163,12 +153,12 @@ public class Deferred {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Deferred deferred = (Deferred) o;
-        return Objects.equals(id, deferred.id) && Objects.equals(transactionId, deferred.transactionId) && Objects.equals(quotas, deferred.quotas) && Objects.equals(cancelledQuotas, deferred.cancelledQuotas) && Objects.equals(interestRate, deferred.interestRate) && Objects.equals(amount, deferred.amount) && Objects.equals(quoteValue, deferred.quoteValue) && Objects.equals(debtvalue, deferred.debtvalue) && Objects.equals(remainingValue, deferred.remainingValue) && Objects.equals(interestValue, deferred.interestValue) && Objects.equals(deferredState, deferred.deferredState) && Objects.equals(transaction, deferred.transaction);
+        return Objects.equals(id, deferred.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -181,10 +171,10 @@ public class Deferred {
                 ", interestRate=" + interestRate +
                 ", amount=" + amount +
                 ", quoteValue=" + quoteValue +
-                ", debtvalue=" + debtvalue +
+                ", debtvalue=" + debtValue +
                 ", remainingValue=" + remainingValue +
                 ", interestValue=" + interestValue +
-                ", deferredState='" + deferredState + '\'' +
+                ", status='" + status + '\'' +
                 ", transaction=" + transaction +
                 '}';
     }

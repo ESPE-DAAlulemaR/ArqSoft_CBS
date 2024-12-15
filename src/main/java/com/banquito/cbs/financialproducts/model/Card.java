@@ -3,63 +3,65 @@ package com.banquito.cbs.financialproducts.model;
 import com.banquito.cbs.customer.model.Customer;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tarjeta")
-public class Card {
+public class Card implements Serializable
+{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
 
-    @Column(name = "cliente_id", nullable = false)
+    @Column(nullable = false)
     private Long customerId;
 
-    @Column(name = "numero", length = 255, nullable = false)
+    @Column(length = 255, nullable = false)
     private String number;
 
-    @Column(name = "pin", length = 100, nullable = false)
+    @Column(length = 100, nullable = false)
     private String pin;
 
-    @Column(name = "facha_caducidad", nullable = false)
+    @Column(nullable = false)
     private Date expirationDate;
 
-    @Column(name = "cvv", length = 255, nullable = false)
+    @Column(length = 255, nullable = false)
     private String cvv;
 
-    @Column(name = "cupo_aprobado", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal quotaApproved;
 
-    @Column(name = "cupo_disponible", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal quotaAvailable;
 
-    @Column(name = "dia_corte", nullable = false)
+    @Column(nullable = false)
     private Integer cutDay;
 
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date issueDate;
+
+    @Column(length = 3, nullable = false)
+    private String status;
+
     @ManyToOne
-    @JoinColumn(name = "cliente_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Customer customer;
 
     public Card() {}
 
-    public Card(Long customerId, String number, String pin, Date expirationDate, String cvv, BigDecimal quotaApproved, BigDecimal quotaAvailable, Integer cutDay) {
-        this.customerId = customerId;
-        this.number = number;
-        this.pin = pin;
-        this.expirationDate = expirationDate;
-        this.cvv = cvv;
-        this.quotaApproved = quotaApproved;
-        this.quotaAvailable = quotaAvailable;
-        this.cutDay = cutDay;
+    public Card(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -127,6 +129,22 @@ public class Card {
         this.cutDay = cutDay;
     }
 
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -140,7 +158,7 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(id, card.id) && Objects.equals(customerId, card.customerId) && Objects.equals(number, card.number) && Objects.equals(pin, card.pin) && Objects.equals(expirationDate, card.expirationDate) && Objects.equals(cvv, card.cvv) && Objects.equals(quotaApproved, card.quotaApproved) && Objects.equals(quotaAvailable, card.quotaAvailable) && Objects.equals(cutDay, card.cutDay) && Objects.equals(customer, card.customer);
+        return Objects.equals(id, card.id);
     }
 
     @Override
@@ -160,7 +178,8 @@ public class Card {
                 ", quotaApproved=" + quotaApproved +
                 ", quotaAvailable=" + quotaAvailable +
                 ", cutDay=" + cutDay +
-                ", customer=" + customer +
+                ", issueDate=" + issueDate +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

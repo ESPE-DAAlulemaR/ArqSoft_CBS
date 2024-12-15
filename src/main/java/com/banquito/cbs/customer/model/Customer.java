@@ -4,55 +4,53 @@ import com.banquito.cbs.people.model.Enterprise;
 import com.banquito.cbs.people.model.Person;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "cliente")
-public class Customer {
+public class Customer implements Serializable
+{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
 
-    @Column(name = "persona_natural_id", nullable = true)
+    @Column(nullable = true)
     private Long personId;
 
-    @Column(name = "persona_juridica_id", nullable = true)
+    @Column(nullable = true)
     private Long enterpriseId;
 
-    @Column(name = "tipo_cliente", length = 3, nullable = false)
+    @Column(length = 3, nullable = false)
     private String customerType;
 
-    @Column(name = "fecha_registro", nullable = false)
+    @Column(nullable = false)
     private Date registerDate;
 
-    @Column(name = "ingreso_promedio_mes", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal averageMonthlyIncome;
 
     @ManyToOne
-    @JoinColumn(name = "persona_natural_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "persona_juridica_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "ENTERPRISE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Enterprise enterprise;
 
     public Customer() {}
 
-    public Customer(Long personId, Long enterpriseId, String customerType, Date registerDate, BigDecimal averageMonthlyIncome) {
-        this.personId = personId;
-        this.enterpriseId = enterpriseId;
-        this.customerType = customerType;
-        this.registerDate = registerDate;
-        this.averageMonthlyIncome = averageMonthlyIncome;
+    public Customer(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -117,7 +115,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) && Objects.equals(personId, customer.personId) && Objects.equals(enterpriseId, customer.enterpriseId) && Objects.equals(customerType, customer.customerType) && Objects.equals(registerDate, customer.registerDate) && Objects.equals(averageMonthlyIncome, customer.averageMonthlyIncome) && Objects.equals(person, customer.person) && Objects.equals(enterprise, customer.enterprise);
+        return Objects.equals(id, customer.id);
     }
 
     @Override
@@ -134,8 +132,6 @@ public class Customer {
                 ", customerType='" + customerType + '\'' +
                 ", registerDate=" + registerDate +
                 ", averageMonthlyIncome=" + averageMonthlyIncome +
-                ", person=" + person +
-                ", enterprise=" + enterprise +
                 '}';
     }
 }

@@ -6,74 +6,64 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name="direccion")
-public class Address implements Serializable {
+public class Address implements Serializable
+{
     @Id
-    @Column
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "persona_natural_id", nullable = true)
+    @Column(nullable = true)
     private Long personId;
 
-    @Column(name = "persona_juridica_id", nullable = true)
+    @Column(nullable = true)
     private Long enterpriseId;
 
-    @Column(name = "ciudad", length = 32, nullable = false)
+    @Column(length = 32, nullable = false)
     private String city;
 
-    @Column(name = "provincia", length = 32, nullable = false)
-    private String state;
+    @Column(length = 32, nullable = false)
+    private String province;
 
-    @Column(name = "canton", length = 32, nullable = false)
+    @Column(length = 32, nullable = false)
     private String canton;
 
-    @Column(name = "sector", length = 32, nullable = false)
+    @Column(length = 32, nullable = false)
     private String sector;
 
-    @Column(name = "calle_principal", length = 64, nullable = false)
+    @Column(length = 64, nullable = false)
     private String principalStreet;
 
-    @Column(name = "calle_secundaria", length = 64, nullable = false)
+    @Column(length = 64, nullable = false)
     private String secondaryStreet;
 
-    @Column(name = "numeracion", length = 16, nullable = false)
+    @Column(length = 16, nullable = false)
     private String number;
 
-    @Column(name = "referencia", length = 64, nullable = false)
+    @Column(length = 64, nullable = false)
     private String reference;
 
-    @Column(name = "detalle_adicional", length = 100, nullable = false)
+    @Column(length = 100, nullable = true)
     private String detail;
 
     @ManyToOne
-    @JoinColumn(name = "persona_natural_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "persona_juridica_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "ENTERPRISE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Enterprise enterprise;
 
     public Address() {}
 
-    public Address(String detail, String reference, String number, String secondaryStreet, String principalStreet, String sector, String canton, String state, String city, Long enterpriseId, Long personId) {
-        this.detail = detail;
-        this.reference = reference;
-        this.number = number;
-        this.secondaryStreet = secondaryStreet;
-        this.principalStreet = principalStreet;
-        this.sector = sector;
-        this.canton = canton;
-        this.state = state;
-        this.city = city;
-        this.enterpriseId = enterpriseId;
-        this.personId = personId;
+    public Address(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -101,12 +91,12 @@ public class Address implements Serializable {
         this.city = city;
     }
 
-    public String getState() {
-        return state;
+    public String getProvince() {
+        return province;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCanton() {
@@ -186,7 +176,7 @@ public class Address implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(id, address.id) && Objects.equals(personId, address.personId) && Objects.equals(enterpriseId, address.enterpriseId) && Objects.equals(city, address.city) && Objects.equals(state, address.state) && Objects.equals(canton, address.canton) && Objects.equals(sector, address.sector) && Objects.equals(principalStreet, address.principalStreet) && Objects.equals(secondaryStreet, address.secondaryStreet) && Objects.equals(number, address.number) && Objects.equals(reference, address.reference) && Objects.equals(detail, address.detail) && Objects.equals(person, address.person) && Objects.equals(enterprise, address.enterprise);
+        return Objects.equals(id, address.id);
     }
 
     @Override
@@ -201,7 +191,7 @@ public class Address implements Serializable {
                 ", personId=" + personId +
                 ", enterpriseId=" + enterpriseId +
                 ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
+                ", province='" + province + '\'' +
                 ", canton='" + canton + '\'' +
                 ", sector='" + sector + '\'' +
                 ", principalStreet='" + principalStreet + '\'' +
@@ -209,8 +199,6 @@ public class Address implements Serializable {
                 ", number='" + number + '\'' +
                 ", reference='" + reference + '\'' +
                 ", detail='" + detail + '\'' +
-                ", person=" + person +
-                ", enterprise=" + enterprise +
                 '}';
     }
 }

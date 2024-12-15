@@ -4,76 +4,77 @@ import com.banquito.cbs.financialproducts.model.Account;
 import com.banquito.cbs.financialproducts.model.Card;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name = "transaccion")
-public class Transaction {
+public class Transaction implements Serializable
+{
     @Id
-    @Column
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "cuenta_id", nullable = true)
+    @Column(nullable = true)
     private Long accountId;
 
-    @Column(name = "tarjeta_id", nullable = true)
+    @Column(nullable = true)
     private Long cardId;
 
-    @Column
-    private String transactionType;
+    @Column(length = 3, nullable = true)
+    private String type;
 
-    @Column
-    private String transactionChanel;
+    @Column(length = 3, nullable = true)
+    private String chanel;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    private Timestamp transactionDate;
+    @Column(nullable = false)
+    private Timestamp transactionAt;
 
-    @Column(name = "valor", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal value;
 
-    @Column(name = "comision", length = 18, precision = 2, nullable = false)
-    private BigDecimal comision;
+    @Column(length = 18, precision = 2, nullable = false)
+    private BigDecimal commission;
 
-    @Column(name = "interes", length = 3, precision = 2, nullable = false)
-    private BigDecimal interest;
+    @Column(length = 3, precision = 2, nullable = false)
+    private BigDecimal interestRate;
 
-    @Column(name = "es_diferido", nullable = false)
+    @Column(nullable = false)
     private Boolean isDeferred;
 
-    @Column(name = "estado", length = 3, nullable = false)
-    private String transactionState;
+    @Column(length = 3, nullable = false)
+    private String status;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "cuenta_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "tarjeta_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Card card;
 
     public Transaction() { }
 
-    public Transaction(Long accountId, Long cardId, String transactionType, String transactionChanel, Timestamp transactionDate, BigDecimal value, BigDecimal comision, Boolean isDeferred, BigDecimal interest, String transactionState) {
-        this.accountId = accountId;
-        this.cardId = cardId;
-        this.transactionType = transactionType;
-        this.transactionChanel = transactionChanel;
-        this.transactionDate = transactionDate;
-        this.value = value;
-        this.comision = comision;
-        this.isDeferred = isDeferred;
-        this.interest = interest;
-        this.transactionState = transactionState;
+    public Transaction(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -93,28 +94,28 @@ public class Transaction {
         this.cardId = cardId;
     }
 
-    public String getTransactionType() {
-        return transactionType;
+    public String getType() {
+        return type;
     }
 
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getTransactionChanel() {
-        return transactionChanel;
+    public String getChanel() {
+        return chanel;
     }
 
-    public void setTransactionChanel(String transactionChanel) {
-        this.transactionChanel = transactionChanel;
+    public void setChanel(String chanel) {
+        this.chanel = chanel;
     }
 
-    public Timestamp getTransactionDate() {
-        return transactionDate;
+    public Timestamp getTransactionAt() {
+        return transactionAt;
     }
 
-    public void setTransactionDate(Timestamp transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setTransactionAt(Timestamp transactionAt) {
+        this.transactionAt = transactionAt;
     }
 
     public BigDecimal getValue() {
@@ -125,20 +126,20 @@ public class Transaction {
         this.value = value;
     }
 
-    public BigDecimal getComision() {
-        return comision;
+    public BigDecimal getCommission() {
+        return commission;
     }
 
-    public void setComision(BigDecimal comision) {
-        this.comision = comision;
+    public void setCommission(BigDecimal commission) {
+        this.commission = commission;
     }
 
-    public BigDecimal getInterest() {
-        return interest;
+    public BigDecimal getInterestRate() {
+        return interestRate;
     }
 
-    public void setInterest(BigDecimal interest) {
-        this.interest = interest;
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public Boolean getDeferred() {
@@ -149,12 +150,28 @@ public class Transaction {
         isDeferred = deferred;
     }
 
-    public String getTransactionState() {
-        return transactionState;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTransactionState(String transactionState) {
-        this.transactionState = transactionState;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Account getAccount() {
@@ -178,12 +195,12 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(accountId, that.accountId) && Objects.equals(cardId, that.cardId) && Objects.equals(transactionType, that.transactionType) && Objects.equals(transactionChanel, that.transactionChanel) && Objects.equals(transactionDate, that.transactionDate) && Objects.equals(value, that.value) && Objects.equals(comision, that.comision) && Objects.equals(interest, that.interest) && Objects.equals(isDeferred, that.isDeferred) && Objects.equals(transactionState, that.transactionState) && Objects.equals(account, that.account) && Objects.equals(card, that.card);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -192,16 +209,16 @@ public class Transaction {
                 "id=" + id +
                 ", accountId=" + accountId +
                 ", cardId=" + cardId +
-                ", transactionType='" + transactionType + '\'' +
-                ", transactionChanel='" + transactionChanel + '\'' +
-                ", transactionDate=" + transactionDate +
+                ", type='" + type + '\'' +
+                ", chanel='" + chanel + '\'' +
+                ", transactionAt=" + transactionAt +
                 ", value=" + value +
-                ", comision=" + comision +
-                ", interest=" + interest +
+                ", commission=" + commission +
+                ", interestRate=" + interestRate +
                 ", isDeferred=" + isDeferred +
-                ", transactionState='" + transactionState + '\'' +
-                ", account=" + account +
-                ", card=" + card +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

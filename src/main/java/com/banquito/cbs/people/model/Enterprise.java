@@ -1,54 +1,120 @@
 package com.banquito.cbs.people.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
-public class Enterprise {
+public class Enterprise implements Serializable
+{
     @Id
-    @Column
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "persona_natural_id", nullable = false)
+    @Column(nullable = false)
     private Long personId;
 
-    @Column(name = "ruc", length = 13, nullable = false)
+    @Column(length = 13, nullable = false)
     private String ruc;
 
-    @Column(name = "razon_social", length = 40, nullable = false)
+    @Column(length = 100, nullable = false)
     private String bussinessName;
 
-    @Column(name = "email", length = 40, nullable = false)
+    @Column(length = 50, nullable = false)
     private String email;
 
-    @Column(name = "telefono", length = 10, nullable = false)
+    @Column(length = 10, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "fecha_constitucion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date incorporationDate;
 
-    @Column(name = "fecha_registro", nullable = false)
-    private Date registerDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Timestamp registerAt;
 
     @ManyToOne
-    @JoinColumn(name = "persona_natural_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", updatable = false, insertable = false)
     private Person person;
 
     public Enterprise() { }
 
-    public Enterprise(Integer id, Long personId, String ruc, String bussinessName, String email, String phoneNumber, Date incorporationDate, Date registerDate, Person person) {
+    public Enterprise(Long id) {
         this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Long personId) {
         this.personId = personId;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
         this.ruc = ruc;
+    }
+
+    public String getBussinessName() {
+        return bussinessName;
+    }
+
+    public void setBussinessName(String bussinessName) {
         this.bussinessName = bussinessName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Date getIncorporationDate() {
+        return incorporationDate;
+    }
+
+    public void setIncorporationDate(Date incorporationDate) {
         this.incorporationDate = incorporationDate;
-        this.registerDate = registerDate;
+    }
+
+    public Timestamp getRegisterAt() {
+        return registerAt;
+    }
+
+    public void setRegisterAt(Timestamp registerAt) {
+        this.registerAt = registerAt;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
         this.person = person;
     }
 
@@ -57,12 +123,12 @@ public class Enterprise {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Enterprise that = (Enterprise) o;
-        return Objects.equals(id, that.id) && Objects.equals(personId, that.personId) && Objects.equals(ruc, that.ruc) && Objects.equals(bussinessName, that.bussinessName) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(incorporationDate, that.incorporationDate) && Objects.equals(registerDate, that.registerDate) && Objects.equals(person, that.person);
+        return Objects.equals(ruc, that.ruc);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(ruc);
     }
 
     @Override
@@ -75,8 +141,7 @@ public class Enterprise {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", incorporationDate=" + incorporationDate +
-                ", registerDate=" + registerDate +
-                ", person=" + person +
+                ", registerAt=" + registerAt +
                 '}';
     }
 }

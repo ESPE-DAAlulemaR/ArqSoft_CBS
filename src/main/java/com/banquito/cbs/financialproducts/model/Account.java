@@ -3,54 +3,51 @@ package com.banquito.cbs.financialproducts.model;
 import com.banquito.cbs.customer.model.Customer;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "cuenta")
-public class Account {
+public class Account implements Serializable
+{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
 
-    @Column(name = "cliente_id", nullable = false)
+    @Column(nullable = false)
     private Long customerId;
 
-    @Column(name = "tipo_cuenta", length = 3, nullable = false)
+    @Column(length = 3, nullable = false)
     private String type;
 
-    @Column(name = "number", length = 10, nullable = false)
+    @Column(length = 10, nullable = false)
     private String number;
 
-    @Column(name = "saldo_total", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal totalBalance;
 
-    @Column(name = "saldo_disponible", length = 18, precision = 2, nullable = false)
+    @Column(length = 18, precision = 2, nullable = false)
     private BigDecimal availableBalance;
 
-    @Column(name = "estado", length = 3, nullable = false)
-    private String accountState;
+    @Column(length = 3, nullable = false)
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private Customer customer;
 
     public Account() { }
 
-    public Account(String type, String number, BigDecimal totalBalance, BigDecimal availableBalance, String accountState, Long customerId) {
-        this.type = type;
-        this.number = number;
-        this.totalBalance = totalBalance;
-        this.availableBalance = availableBalance;
-        this.accountState = accountState;
-        this.customerId = customerId;
+    public Account(Long id) {
+        this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -94,12 +91,12 @@ public class Account {
         this.availableBalance = availableBalance;
     }
 
-    public String getAccountState() {
-        return accountState;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAccountState(String accountState) {
-        this.accountState = accountState;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Customer getCustomer() {
@@ -115,7 +112,7 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(id, account.id) && Objects.equals(customerId, account.customerId) && Objects.equals(type, account.type) && Objects.equals(number, account.number) && Objects.equals(totalBalance, account.totalBalance) && Objects.equals(availableBalance, account.availableBalance) && Objects.equals(accountState, account.accountState);
+        return Objects.equals(id, account.id);
     }
 
     @Override
@@ -132,7 +129,7 @@ public class Account {
                 ", number='" + number + '\'' +
                 ", totalBalance=" + totalBalance +
                 ", availableBalance=" + availableBalance +
-                ", accountState='" + accountState + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
