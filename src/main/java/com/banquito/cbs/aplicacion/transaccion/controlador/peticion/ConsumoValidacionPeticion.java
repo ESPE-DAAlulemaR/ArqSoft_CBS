@@ -4,7 +4,7 @@ import com.banquito.cbs.aplicacion.transaccion.modelo.DetalleJson;
 
 import java.math.BigDecimal;
 
-public class ConsumoPeticion
+public class ConsumoValidacionPeticion
 {
     private String numeroTarjeta;
     private String cvv;
@@ -17,7 +17,6 @@ public class ConsumoPeticion
     private String binBanco;
     private Boolean esDiferido;
     private Integer cuotas;
-    private DetalleJson detalle;
 
     public String getNumeroTarjeta() {
         return numeroTarjeta;
@@ -61,9 +60,5 @@ public class ConsumoPeticion
 
     public Integer getCuotas() {
         return cuotas;
-    }
-
-    public DetalleJson getDetalle() {
-        return detalle;
     }
 }

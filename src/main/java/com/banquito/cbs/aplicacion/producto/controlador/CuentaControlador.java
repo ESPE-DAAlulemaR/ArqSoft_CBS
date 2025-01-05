@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("cuentas")
+@CrossOrigin("*")
 public class CuentaControlador {
     private final CuentaServicio servicio;
     private final CuentaAdaptador adaptador;

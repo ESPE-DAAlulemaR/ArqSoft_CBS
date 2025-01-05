@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -57,10 +58,10 @@ public class Transaccion implements Serializable
     private String estado;
 
     @Column(name = "FECHA_CREACION")
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "FECHA_ACTUALIZACION")
-    private LocalDate fechaActualizacion;
+    private LocalDateTime fechaActualizacion;
 
     public Transaccion() {}
 
@@ -156,19 +157,19 @@ public class Transaccion implements Serializable
         this.estado = estado;
     }
 
-    public LocalDate getFechaCreacion() {
+    public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDate fechaCreacion) {
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public LocalDate getFechaActualizacion() {
+    public LocalDateTime getFechaActualizacion() {
         return fechaActualizacion;
     }
 
-    public void setFechaActualizacion(LocalDate fechaActualizacion) {
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
 

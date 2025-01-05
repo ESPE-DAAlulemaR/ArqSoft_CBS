@@ -1,8 +1,8 @@
-package com.banquito.cbs.aplicacion.transaccion.controlador.peticion;
+package com.banquito.cbs.aplicacion.transaccion.modelo;
 
 import java.math.BigDecimal;
 
-public class ItemDetalleJsonPeticion
+public class ItemComision
 {
     private String referencia;
 

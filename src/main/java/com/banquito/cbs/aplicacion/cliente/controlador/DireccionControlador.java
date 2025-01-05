@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("direcciones")
+@CrossOrigin("*")
 public class DireccionControlador
 {
     private final ClienteServicio clienteServicio;

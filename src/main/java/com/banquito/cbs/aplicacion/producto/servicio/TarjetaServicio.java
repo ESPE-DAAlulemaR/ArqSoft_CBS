@@ -57,6 +57,12 @@ public class TarjetaServicio {
         repositorio.save(tarjeta);
     }
 
+    public void actualizarTarjeta(Tarjeta tarjeta) {
+        tarjeta.setFechaActualizacion(LocalDateTime.now(ZoneId.systemDefault()));
+
+        repositorio.save(tarjeta);
+    }
+
     public void activarTarjeta(Tarjeta tarjeta) {
         tarjeta.setEstado(ESTADO_ACTIVA);
         tarjeta.setFechaActualizacion(LocalDateTime.now(ZoneId.systemDefault()));

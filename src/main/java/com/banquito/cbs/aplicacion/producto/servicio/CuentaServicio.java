@@ -107,7 +107,7 @@ public class CuentaServicio {
         return String.format("%08d", numero);
     }
 
-    private void actualizarTotalCuenta(Cuenta cuenta) {
+    public void actualizarTotalCuenta(Cuenta cuenta) {
         cuenta.setSaldoTotal(cuenta.getSaldoDisponible().add(cuenta.getSaldoAcreditar()));
         cuenta.setFechaActualizacion(LocalDateTime.now(ZoneId.systemDefault()));
     }

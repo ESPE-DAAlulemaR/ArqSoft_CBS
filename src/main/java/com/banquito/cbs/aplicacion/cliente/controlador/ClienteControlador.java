@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("clientes")
+@CrossOrigin("*")
 public class ClienteControlador
 {
     private final ClienteServicio servicio;

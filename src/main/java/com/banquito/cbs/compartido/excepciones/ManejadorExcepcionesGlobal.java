@@ -1,5 +1,6 @@
 package com.banquito.cbs.compartido.excepciones;
 
+import com.banquito.cbs.aplicacion.transaccion.excepcion.FraudeExcepcion;
 import com.banquito.cbs.compartido.respuestas.RespuestaApi;
 import com.banquito.cbs.compartido.utilidades.UtilidadRespuesta;
 import jakarta.validation.ConstraintViolationException;
@@ -72,6 +73,17 @@ public class ManejadorExcepcionesGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 UtilidadRespuesta.error(
                         "OPERACION_INVALIDA",
+                        ex.getMessage(),
+                        null
+                )
+        );
+    }
+
+    @ExceptionHandler(FraudeExcepcion.class)
+    public ResponseEntity<?> handleFraudeException(FraudeExcepcion ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                UtilidadRespuesta.error(
+                        "TRANSACCION_FRAUDULENTA",
                         ex.getMessage(),
                         null
                 )

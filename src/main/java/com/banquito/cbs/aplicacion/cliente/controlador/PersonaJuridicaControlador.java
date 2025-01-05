@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("personas-juridicas")
+@CrossOrigin("*")
 public class PersonaJuridicaControlador
 {
     private final PersonaJuridicaServicio servicio;

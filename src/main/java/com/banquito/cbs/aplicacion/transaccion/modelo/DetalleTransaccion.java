@@ -1,10 +1,14 @@
 package com.banquito.cbs.aplicacion.transaccion.modelo;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +16,6 @@ import java.util.Objects;
 public class DetalleTransaccion implements Serializable
 {
     @Id
-    @NotNull
     @Column(name = "TRANSACCION_ID")
     private Integer transaccionId;
 
@@ -22,8 +25,11 @@ public class DetalleTransaccion implements Serializable
     @Column(name = "BENEFICIARIO", length = 128)
     private String beneficiario;
 
-    @Column(name = "NUMERO", length = 16)
-    private String numero;
+    @Column(name = "CUENTA_ORIGEN", length = 16)
+    private String cuentaOrigen;
+
+    @Column(name = "CUENTA_DESTINO", length = 16)
+    private String cuentaDestino;
 
     @Column(name = "BIN_BANCO_ORIGEN", length = 8)
     private String binBancoOrigen;
@@ -34,11 +40,40 @@ public class DetalleTransaccion implements Serializable
     @Column(name = "DESCRIPCION", length = 128)
     private String descripcion;
 
+    @Lob
     @Column(name = "DETALLE_JSON")
     private String detalleJson;
 
     @Column(name = "FECHA_AUTORIZACION")
     private LocalDate fechaAutorizacion;
+
+    @Transient
+    private Map<String, Object> detalleMap;
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    @PostLoad
+    private void postLoad() {
+        if (this.detalleJson != null) {
+            try {
+                this.detalleMap = OBJECT_MAPPER.readValue(this.detalleJson, new TypeReference<Map<String, Object>>() {});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void prePersist() {
+        if (this.detalleMap != null) {
+            try {
+                this.detalleJson = OBJECT_MAPPER.writeValueAsString(this.detalleMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @NotNull
     @ManyToOne
@@ -51,11 +86,11 @@ public class DetalleTransaccion implements Serializable
         this.transaccionId = transaccionId;
     }
 
-    public @NotNull Integer getTransaccionId() {
+    public Integer getTransaccionId() {
         return transaccionId;
     }
 
-    public void setTransaccionId(@NotNull Integer transaccionId) {
+    public void setTransaccionId(Integer transaccionId) {
         this.transaccionId = transaccionId;
     }
 
@@ -75,12 +110,20 @@ public class DetalleTransaccion implements Serializable
         this.beneficiario = beneficiario;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getCuentaOrigen() {
+        return cuentaOrigen;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setCuentaOrigen(String cuentaOrigen) {
+        this.cuentaOrigen = cuentaOrigen;
+    }
+
+    public String getCuentaDestino() {
+        return cuentaDestino;
+    }
+
+    public void setCuentaDestino(String cuentaDestino) {
+        this.cuentaDestino = cuentaDestino;
     }
 
     public String getBinBancoOrigen() {
@@ -131,6 +174,14 @@ public class DetalleTransaccion implements Serializable
         this.transaccion = transaccion;
     }
 
+    public Map<String, Object> getDetalleMap() {
+        return detalleMap;
+    }
+
+    public void setDetalleMap(Map<String, Object> detalleMap) {
+        this.detalleMap = detalleMap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,11 +197,12 @@ public class DetalleTransaccion implements Serializable
 
     @Override
     public String toString() {
-        return "TransaccionDetalle{" +
+        return "DetalleTransaccion{" +
                 "transaccionId=" + transaccionId +
                 ", tipoCuenta='" + tipoCuenta + '\'' +
                 ", beneficiario='" + beneficiario + '\'' +
-                ", numero='" + numero + '\'' +
+                ", cuentaOrigen='" + cuentaOrigen + '\'' +
+                ", cuentaDestino='" + cuentaDestino + '\'' +
                 ", binBancoOrigen='" + binBancoOrigen + '\'' +
                 ", binBancoDestino='" + binBancoDestino + '\'' +
                 ", descripcion='" + descripcion + '\'' +

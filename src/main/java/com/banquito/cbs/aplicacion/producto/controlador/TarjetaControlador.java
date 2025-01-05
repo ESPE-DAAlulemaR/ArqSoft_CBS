@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("tarjetas")
+@CrossOrigin("*")
 public class TarjetaControlador {
     private final TarjetaServicio servicio;
     private final TarjetaAdaptador adaptador;

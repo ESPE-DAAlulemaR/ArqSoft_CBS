@@ -34,14 +34,16 @@ public class Usuario implements Serializable
     private String contrasenia;
 
     @NotNull
+    @Column(name = "IMG", length = 256)
+    private String img;
+
+    @NotNull
     @Column(name = "ESTADO", length = 3)
     private String estado;
 
-    @NotNull
     @Column(name = "FECHA_ULTIMO_INGRESO")
     private LocalDate fechaUltimoIngreso;
 
-    @NotNull
     @Column(name = "IP_ULTIMO_INGRESO", length = 15)
     private String ipUltimoIngreso;
 
@@ -99,6 +101,14 @@ public class Usuario implements Serializable
 
     public void setContrasenia(@NotNull String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public @NotNull String getEstado() {
