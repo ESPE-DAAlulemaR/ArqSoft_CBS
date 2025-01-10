@@ -25,6 +25,5 @@ public class CuentaAdaptador {
     {
         cuenta.setClienteId(peticion.getClienteId());
         cuenta.setTipo(peticion.getTipo());
-        cuenta.setSaldoDisponible(peticion.getDepositoInicial());
     }
 }

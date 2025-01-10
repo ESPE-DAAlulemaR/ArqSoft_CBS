@@ -63,6 +63,10 @@ public class Transaccion implements Serializable
     @Column(name = "FECHA_ACTUALIZACION")
     private LocalDateTime fechaActualizacion;
 
+    @OneToOne
+    @JoinColumn(name = "ID", referencedColumnName = "TRANSACCION_ID", insertable = false, updatable = false)
+    private DetalleTransaccion detalleTransaccion;
+
     public Transaccion() {}
 
     public Transaccion(Integer id) {
@@ -171,6 +175,14 @@ public class Transaccion implements Serializable
 
     public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public DetalleTransaccion getDetalleTransaccion() {
+        return detalleTransaccion;
+    }
+
+    public void setDetalleTransaccion(DetalleTransaccion detalleTransaccion) {
+        this.detalleTransaccion = detalleTransaccion;
     }
 
     @Override

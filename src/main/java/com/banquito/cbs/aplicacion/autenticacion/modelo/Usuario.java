@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -42,7 +43,7 @@ public class Usuario implements Serializable
     private String estado;
 
     @Column(name = "FECHA_ULTIMO_INGRESO")
-    private LocalDate fechaUltimoIngreso;
+    private LocalDateTime fechaUltimoIngreso;
 
     @Column(name = "IP_ULTIMO_INGRESO", length = 15)
     private String ipUltimoIngreso;
@@ -119,11 +120,11 @@ public class Usuario implements Serializable
         this.estado = estado;
     }
 
-    public @NotNull LocalDate getFechaUltimoIngreso() {
+    public @NotNull LocalDateTime getFechaUltimoIngreso() {
         return fechaUltimoIngreso;
     }
 
-    public void setFechaUltimoIngreso(@NotNull LocalDate fechaUltimoIngreso) {
+    public void setFechaUltimoIngreso(@NotNull LocalDateTime fechaUltimoIngreso) {
         this.fechaUltimoIngreso = fechaUltimoIngreso;
     }
 

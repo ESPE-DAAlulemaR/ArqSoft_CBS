@@ -8,6 +8,8 @@ import com.banquito.cbs.compartido.utilidades.UtilidadHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,9 @@ public class AutenticacionServicio
 
         if (!UtilidadHash.verificarString(password, usuario.getContrasenia()))
             throw new OperacionInvalidaExcepcion("Contraseña incorrecta");
+
+        usuario.setFechaUltimoIngreso(LocalDateTime.now());
+        this.usuarioRepositorio.save(usuario);
 
         return usuario;
     }

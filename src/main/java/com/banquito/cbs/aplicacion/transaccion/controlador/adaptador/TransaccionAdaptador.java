@@ -11,11 +11,15 @@ public class TransaccionAdaptador
 {
     private final TransaccionServicio servicio;
 
+    public TransaccionAdaptador(TransaccionServicio servicio) {
+        this.servicio = servicio;
+    }
+
     public Transaccion consumoATransaccion(ConsumoPeticion peticion)
     {
         Transaccion transaccion = new Transaccion();
 
-        transaccion.setCanal(peticion.getCanal());
+        transaccion.setCanal("EXT");
         transaccion.setValor(peticion.getValor());
         transaccion.setEsDiferido(peticion.getEsDiferido());
 
@@ -26,14 +30,10 @@ public class TransaccionAdaptador
     {
         Transaccion transaccion = new Transaccion();
 
-        transaccion.setCanal(peticion.getCanal());
+        transaccion.setCanal("EXT");
         transaccion.setValor(peticion.getValor());
         transaccion.setEsDiferido(peticion.getEsDiferido());
 
         return transaccion;
-    }
-
-    public TransaccionAdaptador(TransaccionServicio servicio) {
-        this.servicio = servicio;
     }
 }

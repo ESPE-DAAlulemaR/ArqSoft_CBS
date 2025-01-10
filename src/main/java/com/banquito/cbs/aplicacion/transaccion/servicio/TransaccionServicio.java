@@ -40,9 +40,9 @@ public class TransaccionServicio {
     private static final String TIPO_TRANSFERENCIA_INTERNA = "TRI";
     private static final String TIPO_TRANSFERENCIA_EXTERNA = "TRE";
 
-    private static final String CANAL_WEB = "WEB";
-    private static final String CANAL_MOVIL = "MOV";
-    private static final String CANAL_POS = "POS";
+    public static final String CANAL_WEB = "WEB";
+    public static final String CANAL_MOVIL = "MOV";
+    public static final String CANAL_POS = "POS";
 
     private static final String ESTADO_APROBADA = "APR";
     private static final String ESTADO_RECHAZADA = "REC";
@@ -74,9 +74,10 @@ public class TransaccionServicio {
     }
 
     @Transactional
-    public void crearDeposito(Integer cuentaId, BigDecimal valor, String canal, String descripcion) {
+    public void crearDeposito(Cuenta cuenta, BigDecimal valor, String canal, String descripcion)
+    {
         Transaccion transaccion = new Transaccion();
-        transaccion.setCuentaId(cuentaId);
+        transaccion.setCuentaId(cuenta.getId());
         transaccion.setTipo(TransaccionServicio.TIPO_DEPOSITO);
         transaccion.setCanal(canal);
         transaccion.setValor(valor);
@@ -88,12 +89,13 @@ public class TransaccionServicio {
 
         repositorio.save(transaccion);
 
-        // Detalle de la transacción
         DetalleTransaccion detalle = new DetalleTransaccion();
         detalle.setTransaccionId(transaccion.getId());
         detalle.setDescripcion(descripcion);
 
         detalleTransaccionRepositorio.save(detalle);
+
+        this.cuentaServicio.depositarValores(cuenta, valor);
     }
 
     @Transactional
@@ -169,6 +171,9 @@ public class TransaccionServicio {
     {
         Tarjeta tarjeta = this.tarjetaServicio.buscarPorNumero(numeroTarjeta);
 
+        if (tarjeta.getEstado().equals(TarjetaServicio.ESTADO_INACTIVA))
+            throw new OperacionInvalidaExcepcion("La tarjeta no tiene autorizado transaccionar");
+
         if (!UtilidadHash.verificarString(cvv, tarjeta.getCvv()))
             throw new OperacionInvalidaExcepcion("Código de seguridad de la tarjeta incorrecto");
 
@@ -185,8 +190,8 @@ public class TransaccionServicio {
         List<Transaccion> transaccionesRecientes = repositorio.buscarTransaccionesRecientes(
                 tarjeta.getId(), descripcion, numeroCuenta, beneficiario, LocalDateTime.now().minusMinutes(10));
 
-        if (!transaccionesRecientes.isEmpty())
-            throw new FraudeExcepcion("Transacción similar detectada en los últimos 10 minutos. Posible fraude.");
+        /*if (!transaccionesRecientes.isEmpty())
+            throw new FraudeExcepcion("Transacción similar detectada en los últimos 10 minutos. Posible fraude.");*/
 
         if (transaccion.getEsDiferido())
             transaccion.setTazaInteres(TransaccionServicio.INTERES_CONSUMO);

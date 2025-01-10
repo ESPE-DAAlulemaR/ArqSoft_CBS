@@ -37,7 +37,7 @@ public class CuentaControlador {
     @PostMapping
     public ResponseEntity<?> crear(@Valid @RequestBody CrearCuentaPeticion peticion) {
         Cuenta cuenta = this.adaptador.peticionCreacionACuenta(peticion);
-        this.servicio.crearCuenta(cuenta);
+        this.servicio.crearCuenta(cuenta, peticion.getDepositoInicial());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(UtilidadRespuesta.exito(cuenta));
     }

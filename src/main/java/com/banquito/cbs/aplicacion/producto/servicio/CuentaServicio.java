@@ -2,8 +2,11 @@ package com.banquito.cbs.aplicacion.producto.servicio;
 
 import com.banquito.cbs.aplicacion.producto.modelo.Cuenta;
 import com.banquito.cbs.aplicacion.producto.repositorio.CuentaRepositorio;
+import com.banquito.cbs.aplicacion.transaccion.modelo.Transaccion;
+import com.banquito.cbs.aplicacion.transaccion.servicio.TransaccionServicio;
 import com.banquito.cbs.compartido.excepciones.EntidadNoEncontradaExcepcion;
 import com.banquito.cbs.compartido.excepciones.OperacionInvalidaExcepcion;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +18,7 @@ import java.util.List;
 @Service
 public class CuentaServicio {
     private final CuentaRepositorio repositorio;
+    private final TransaccionServicio transaccionServicio;
 
     public static final String TIPO_AHORROS = "AHO";
     public static final String TIPO_CORRIENTE = "COR";
@@ -22,8 +26,9 @@ public class CuentaServicio {
     public static final String ESTADO_ACTIVA = "ACT";
     public static final String ESTADO_INACTIVA = "INA";
 
-    public CuentaServicio(CuentaRepositorio cuentaRepositorio) {
+    public CuentaServicio(CuentaRepositorio cuentaRepositorio, @Lazy TransaccionServicio transaccionServicio) {
         this.repositorio = cuentaRepositorio;
+        this.transaccionServicio = transaccionServicio;
     }
 
     public List<Cuenta> listar() {
@@ -42,12 +47,13 @@ public class CuentaServicio {
         return this.repositorio.findByNumero(numeroCuenta).orElseThrow(() -> new EntidadNoEncontradaExcepcion("No existe ninguna cuenta con número: " + numeroCuenta));
     }
 
-    public void crearCuenta(Cuenta cuenta) {
+    public void crearCuenta(Cuenta cuenta, BigDecimal depositoInicial) {
         if (!cuenta.getTipo().equals(CuentaServicio.TIPO_AHORROS) && !cuenta.getTipo().equals(CuentaServicio.TIPO_CORRIENTE))
             throw new OperacionInvalidaExcepcion("Tipo de cuenta no valido");
 
         cuenta.setNumero(this.generarNuevoNuemroCuenta());
         cuenta.setSaldoAcreditar(BigDecimal.ZERO);
+        cuenta.setSaldoDisponible(BigDecimal.ZERO);
         cuenta.setEstado(CuentaServicio.ESTADO_ACTIVA);
 
         cuenta.setFechaCreacion(LocalDateTime.now(ZoneId.systemDefault()));
@@ -56,6 +62,8 @@ public class CuentaServicio {
         this.actualizarTotalCuenta(cuenta);
 
         repositorio.save(cuenta);
+
+        this.transaccionServicio.crearDeposito(cuenta, depositoInicial, TransaccionServicio.CANAL_WEB, "Deposito Inicial");
     }
 
     public void depositarValores(Cuenta cuenta, BigDecimal valor) {

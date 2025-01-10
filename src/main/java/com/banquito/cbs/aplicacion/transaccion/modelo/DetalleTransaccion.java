@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "DETALLE_TRANSACCION")
-public class DetalleTransaccion implements Serializable
+public class    DetalleTransaccion implements Serializable
 {
     @Id
     @Column(name = "TRANSACCION_ID")
@@ -74,11 +74,6 @@ public class DetalleTransaccion implements Serializable
             }
         }
     }
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "TRANSACCION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    private Transaccion transaccion;
 
     public DetalleTransaccion() {}
 
@@ -164,14 +159,6 @@ public class DetalleTransaccion implements Serializable
 
     public void setFechaAutorizacion(LocalDate fechaAutorizacion) {
         this.fechaAutorizacion = fechaAutorizacion;
-    }
-
-    public @NotNull Transaccion getTransaccion() {
-        return transaccion;
-    }
-
-    public void setTransaccion(@NotNull Transaccion transaccion) {
-        this.transaccion = transaccion;
     }
 
     public Map<String, Object> getDetalleMap() {

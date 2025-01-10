@@ -11,7 +11,6 @@ public class ConsumoValidacionPeticion
     private String fechaCaducidad;
     private BigDecimal valor;
     private String descripcion;
-    private String canal;
     private String beneficiario;
     private String numeroCuenta;
     private String binBanco;
@@ -36,10 +35,6 @@ public class ConsumoValidacionPeticion
 
     public String getDescripcion() {
         return descripcion;
-    }
-
-    public String getCanal() {
-        return canal;
     }
 
     public String getBeneficiario() {

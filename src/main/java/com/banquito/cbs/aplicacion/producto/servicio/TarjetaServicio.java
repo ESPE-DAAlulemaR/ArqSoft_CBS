@@ -87,6 +87,6 @@ public class TarjetaServicio {
         }
 
         String prefixVisa = "411111";
-        return prefixVisa + String.format("%012d", numero);
+        return prefixVisa + String.format("%010d", numero);
     }
 }
